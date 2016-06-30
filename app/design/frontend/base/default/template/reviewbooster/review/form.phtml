@@ -1,0 +1,159 @@
+<div class="review-form">
+	<?php
+		$productId = $this->getRequest()->getParam('id');
+	?>
+  <?php if ($this->getAllowWriteReviewFlag()): ?>
+    <form action="<?php echo $this->getUrl('reviewbooster/product/post', array('id' => $productId)); ?>" method="post" id="reviewbooster_form" enctype="multipart/form-data">      
+			<?php echo $this->getBlockHtml('formkey'); ?>
+      <div class="li_review" id="product-review-star">
+        <h4><?php echo $this->__('Rating') ?></h4>
+        <script type="text/javascript">
+          var numCode = 0; var codeArray = new Array();
+        </script>
+        <?php foreach ($this->getRatings() as $_rating): ?>
+        <script type="text/javascript">
+          codeArray[numCode] = '<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>';
+          numCode = numCode+1;
+        </script>
+          <div class="rating">
+            <div class="rating_title">
+            <?php echo $this->escapeHtml($_rating->getRatingCode()) ?>
+            </div>
+            <?php foreach ($_rating->getOptions() as $_option): ?>
+            <div class="rating_wrap_start" onclick="ratingfollow('<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>','<?php echo $_option->getValue() ?>');">
+              <input type="radio" name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" class="radio"/>
+              <span id="Span_<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>"></span>
+            </div>
+            <?php endforeach; ?>
+          </div>
+        <?php endforeach; ?>
+        <input type="hidden" name="validate_rating" class="validate-rating" value="" />
+        <div style="clear:both;"></div>
+      </div>
+
+      <div class="review-form-right">
+      <h4><?php echo $this->__('Review') ?></h4>
+      <ul>
+        <li class="li_review">
+          <div class="li_review_nickname">
+            <label for="nickname_field" class="required"><em>*</em><?php echo Mage::helper('reviewbooster')->__('Nickname'); ?></label>
+              <input type="text" name="nickname" id="nickname_field" class="input-text required-entry" value="<?php echo $this->escapeHtml($data->getNickname()) ?>" />
+          </div>
+        </li>
+        <li class="li_review" style='display:none;'>
+          <div class="li_review_summary">
+            <label for="summary_field" class="required"><em>*</em><?php echo Mage::helper('reviewbooster')->__('Summary of Your Review') ?></label>
+            <div>
+              <input type="text" name="title" id="summary_field" class="input-text required-entry" value="Default Topic" />
+            </div>
+          </div>
+        </li>
+
+        <li class="li_review">
+          <div class="li_review_detail">
+            <label for="review_field" class="required"><em>*</em><?php echo Mage::helper('reviewbooster')->__('Review') ?></label>
+            <textarea class="input-text required-entry" name="detail" id="review_field" rows="11"><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
+          </div>
+        </li>        
+      </ul>
+			
+			<?php if ($this->canShowCaptcha()): ?>
+				<div class="captcha-wrapper">
+          <?php echo $this->getChildHtml('captcha') ?>
+				</div>
+			<?php endif; ?>
+      
+      <div class="buttons-set" style=" float: left; ">
+        <button type="button" id="review-submit-button"  title="<?php echo Mage::helper('reviewbooster')->__('Submit Review') ?>" class="button" ><span><span><?php echo Mage::helper('reviewbooster')->__('Submit Review') ?></span></span></button>
+      </div>
+      <div id="review-message" style="display:none;"></div>
+      <div id="loader_container" style="display: none;">
+		    <div class="div-loader"></div>
+		  </div>
+    </div>
+
+    </form>
+		
+    <script type="text/javascript">
+      var dataForm = new VarienForm('reviewbooster_form');
+      Validation.addAllThese(
+        [
+        ['validate-rating', '<?php echo Mage::helper('reviewbooster')->__('Please select one of each of the ratings above') ?>', function() {
+          var error = 1;
+
+          for( var j=0; j < numCode; j++ ) {
+            if( j >= 0 ) {
+              for( var i=1; i<=5; i++ ) {
+                if($(codeArray[j]+"_"+i).checked == true){
+                  error = 0;
+                }
+              }
+
+              if( error == 1 ) {
+                return false;
+              }
+              else {
+                error = 1;
+              }
+             }
+          }
+          return true;
+        }]
+      ]
+      );
+
+			function ratingfollow(checkRatingcode,checkValue){
+        $(checkRatingcode+"_"+checkValue).checked = true;
+				for(var i=1;i<=5; i++){
+					if(i<=checkValue){
+						$("Span_"+checkRatingcode+"_"+i).style.backgroundPosition="0px -200px";//when use firefox;
+					}
+					else{
+            $("Span_"+checkRatingcode+"_"+i).style.backgroundPosition="0px 0px";//when use firefox;
+					}
+				}
+			}
+			
+			Event.observe('review-submit-button', 'click', function(e) {
+				var validator = new Validation(this.form);
+				if (validator.validate()) {
+
+          var request = new Ajax.Request('<?php echo $this->getUrl('reviewbooster/product/post', array('id' => $productId)); ?>',
+            {
+              'method': 'post',
+
+              onCreate: function() {                
+                $('review-submit-button').hide();
+                $('loader_container').show();
+                $('review-message').hide();
+              },
+
+              onSuccess: function (transport) {
+                if (transport.status == 200) {
+                  var data = transport.responseText.evalJSON();
+
+                  if (data.review_list_html) {
+                    $$('.box-reviewbooster').each(function (element){
+                      element.replace(data.review_list_html);
+                    });
+                    if ($('customer_reviews')) {
+                      Effect.ScrollTo($('customer_reviews'));
+                    }
+                  }
+
+                  if (data.message) {
+                    $('review-message').update(data.message);
+                    $('review-message').show();
+                  }
+                  $('review-submit-button').show();
+                  $('loader_container').hide();
+                }
+              },
+              parameters: Form.serialize(this.form)
+            }
+          );
+				}
+			});
+    </script>
+  <?php endif ?>
+</div>

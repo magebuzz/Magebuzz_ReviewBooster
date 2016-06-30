@@ -1,0 +1,84 @@
+<config>
+  <menu>
+    <catalog>
+      <children>
+        <reviewbooster translate="title">
+          <title>Review Booster</title>
+          <sort_order>60</sort_order>
+            <children>
+              <reminder_management translate="title">
+                <title>Manage Reminders</title>
+                <sort_order>1</sort_order>
+                <action>adminhtml/reviewboosteradmin/manageReminder</action>
+              </reminder_management>
+              <unsubscribed_customer translate="title">
+                <title>Manage Unsubscribed Customers</title>
+                <sort_order>2</sort_order>
+                <action>adminhtml/reviewboosteradmin/manageUnsubscriber</action>
+              </unsubscribed_customer>
+              <social translate="title">
+                <title>Social Sharing</title>
+                <sort_order>3</sort_order>
+                <action>adminhtml/reviewboosteradmin/social</action>
+              </social>
+              <configuration translate="title">
+                <title>Configuration</title>
+                <sort_order>4</sort_order>
+                <action>adminhtml/system_config/edit/section/reviewbooster</action>
+              </configuration>
+            </children>
+        </reviewbooster>
+      </children>
+    </catalog>
+  </menu>
+
+  <acl>
+    <resources>
+      <all>
+          <title>Allow Everything</title>
+      </all>
+      <admin>
+        <children>
+          <system>
+            <children>
+              <config>
+                <children>
+                  <reviewbooster translate="title">
+                    <title>Review Booster Config</title>
+                    <sort_order>100</sort_order>
+                  </reviewbooster>
+                </children>
+              </config>
+            </children>
+          </system>
+					<catalog>
+						<children>
+							<reviewbooster translate="title">
+								<title>Review Booster</title>
+								<sort_order>60</sort_order>
+									<children>
+										<reminder_management translate="title">
+											<title>Manage Reminders</title>
+											<sort_order>1</sort_order>
+										</reminder_management>
+										<unsubscribed_customer translate="title">
+											<title>Manage Unsubscribed Customers</title>
+											<sort_order>2</sort_order>
+										</unsubscribed_customer>
+										<social translate="title">
+											<title>Social Sharing</title>
+											<sort_order>3</sort_order>
+										</social>
+										<configuration translate="title">
+											<title>Configuration</title>
+											<sort_order>4</sort_order>
+										</configuration>
+									</children>
+							</reviewbooster>
+						</children>
+					</catalog>
+        </children>
+      </admin>
+    </resources>
+  </acl>
+</config>

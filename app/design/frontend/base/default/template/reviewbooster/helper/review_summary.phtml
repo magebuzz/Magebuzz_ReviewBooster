@@ -1,0 +1,18 @@
+<?php if ($this->getReviewsCount()): ?>
+  <div class="ratings">
+    <?php if ($this->getRatingSummary()): ?>
+      <div class="rating-box">
+        <div class="rating" style="width:<?php echo $this->getRatingSummary() ?>%"></div>
+      </div>
+    <?php endif; ?>
+    <p class="rating-links">
+      <a
+        href="#customer_reviews"><?php echo Mage::helper('reviewbooster')->__('%d Review(s)', $this->getReviewsCount()) ?></a>
+      <span class="separator">|</span>
+      <a href="#review-form"><?php echo Mage::helper('reviewbooster')->__('Add Your Review') ?></a>
+    </p>
+  </div>
+<?php elseif ($this->getDisplayIfEmpty()): ?>
+  <p class="no-rating"><a
+      href="#review-form"><?php echo Mage::helper('reviewbooster')->__('Be the first to review this product') ?></a></p>
+<?php endif; ?>

@@ -1,0 +1,65 @@
+<!--@subject Please rate or give us a review for {{var product.name}}@-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"var logo_url":"Email Logo Image Url",
+"var producuUrl":"Product Url",
+"var producuImg":"Product Image",
+"var product.name":"Product Name",
+"var unsubscribe_link":"Unsubscribe Link",
+"var reviewUrl":"Review Link"}
+@-->
+
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+<tr>
+    <td align="center" valign="top" style="padding:20px 0 20px 0">
+        <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+            <!-- [ header starts here] -->
+            <tr>
+                <td valign="top"><a href="{{store url=""}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a></td>
+            </tr>
+            <!-- [ middle starts here] -->
+            <tr>
+                <td valign="top">
+                    <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">Hello, {{var customerName}}!</h1>
+                </td>
+                
+            </tr>
+            <tr>
+                <td>
+                    <p>Thanks for purchasing our product! </p>
+                    <p>Please rate or give us a review for it by click <a href="{{var reviewUrl}}">here</a></p>
+                </td>
+                <td>
+                    <a href="{{var productUrl}}" title="{{var product.name}}"><img src="{{var productImg}}" width="100" height="100" alt="{{var product.name}}" /></a>
+                    <div>
+                        <p><a href="{{var productUrl}}">{{var product.name}}</a></p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>Review link</p>
+                    <p><a href="{{var reviewUrl}}">{{var reviewUrl}}</a></p>
+                </td>
+            </tr>
+            <tr>    
+                <td colspan="2">
+                    <p>Unsubscribe link</p>
+                    <p><a href="{{var unsubscribeUrl}}">{{var unsubscribeUrl}}</a></p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Thank you!</p></center></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+</table>
+</div>
+</body>

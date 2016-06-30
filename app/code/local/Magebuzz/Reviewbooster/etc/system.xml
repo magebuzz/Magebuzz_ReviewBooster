@@ -1,0 +1,354 @@
+<?xml version="1.0"?>
+<config>
+  <tabs>
+    <magebuzz translate="label" module="reviewbooster">
+      <label>Magebuzz Add-ons</label>
+			<sort_order>400</sort_order>
+    </magebuzz>
+  </tabs>
+  <sections>
+    <reviewbooster translate="label" module="reviewbooster">
+      <label>Review Booster</label>
+      <tab>magebuzz</tab>
+      <frontend_type>text</frontend_type>
+      <sort_order>1000</sort_order>
+      <show_in_default>1</show_in_default>
+      <show_in_website>1</show_in_website>
+      <show_in_store>1</show_in_store>
+      <groups>
+        <product_page translate="label" module="reviewbooster">
+          <label>Review in Product Page</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>100</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <review_enabled translate="label" module="reviewbooster">
+              <label>Enable Review in Product Page</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>1</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </review_enabled>
+            <review_social_sharing_enabled translate="label" module="reviewbooster">
+              <label>Enable Social Sharing</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>2</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <review_enabled>1</review_enabled>
+              </depends>
+            </review_social_sharing_enabled>
+
+            <voting_enabled translate="label" module="reviewbooster">
+              <label>Enable Voting for Review</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>3</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <review_enabled>1</review_enabled>
+              </depends>
+            </voting_enabled>
+            <auto_approved translate="label" module="reviewbooster">
+              <label>Auto Approved review with Customer Logged-in</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>4</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <review_enabled>1</review_enabled>
+              </depends>
+            </auto_approved>
+
+            <!-- captcha config -->
+            <captcha_enabled translate="label" module="reviewbooster">
+              <label>Enable reCaptcha in Review Form</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>5</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <review_enabled>1</review_enabled>
+              </depends>
+            </captcha_enabled>
+            <public_key translate="label">
+              <label>reCaptcha Public Key</label>
+              <comment>You got this from the signup page: https://www.google.com/recaptcha</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <captcha_enabled>1</captcha_enabled>
+                <review_enabled>1</review_enabled>
+              </depends>
+            </public_key>
+            <private_key translate="label">
+              <label>reCaptcha Private Key</label>
+              <comment>You got this from the signup page: https://www.google.com/recaptcha</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <captcha_enabled>1</captcha_enabled>
+                <review_enabled>1</review_enabled>
+              </depends>
+            </private_key>            
+            <captcha_logged_in translate="label" module="reviewbooster">
+              <label>Enable reCaptcha with Customer Logged-in</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>60</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <captcha_enabled>1</captcha_enabled>
+                <review_enabled>1</review_enabled>
+              </depends>
+            </captcha_logged_in>
+            <!-- end captcha config -->
+
+          </fields>
+        </product_page>
+
+        <sidebar translate="label" module="reviewbooster">
+          <label>Sidebar Display</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>200</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <left_enabled translate="label" module="reviewbooster">
+              <label>Display reviews on the Left sidebar</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>1</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </left_enabled>
+            <right_enabled translate="label" module="reviewbooster">
+              <label>Display reviews on the Right sidebar</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>2</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </right_enabled>
+            <block_title translate="label" module="reviewbooster">
+              <label>Block Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>5</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment>Default is "RECENT REVIEWS"</comment>
+            </block_title>
+            <product_image_enabled translate="label" module="reviewbooster">
+              <label>Enable to display Product Image with Review</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>3</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </product_image_enabled>
+            <category_filter_enabled translate="label" module="reviewbooster">
+              <label>Filter reviews by category</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>4</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </category_filter_enabled>
+            <number_item translate="label" module="reviewbooster">
+              <label>Number of reviews to display</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>5</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <validate>validate-digits</validate>
+              <comment>Default is "3"</comment>
+            </number_item>
+            <min_percent_rating translate="label" module="reviewbooster">
+              <label>Display ONLY reviews have rating greater than (%)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>6</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <validate>validate-digits</validate>
+              <comment>100(%) equals to 5-star. Default is "80"</comment>
+            </min_percent_rating>
+          </fields>
+        </sidebar>
+
+        <admin_notifier translate="label" module="reviewbooster">
+          <label>Admin Notification</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>300</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <enabled translate="label" module="reviewbooster">
+              <label>Send notification to admin</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>1</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </enabled>
+            <admin_emails translate="label" module="reviewbooster">
+              <label>Admin emails</label>
+              <frontend_type>Textarea</frontend_type>
+              <sort_order>2</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <!-- <validate>validate-email</validate> -->
+              <comment>Emails should be seperated by comma, newline or space</comment>
+              <depends>
+                <enabled>1</enabled>
+              </depends>
+            </admin_emails>
+            <email_template translate="label" module="reviewbooster">
+              <label>Email template</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_email_template</source_model>
+              <sort_order>3</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <enabled>1</enabled>
+              </depends>
+            </email_template>
+          </fields>
+        </admin_notifier>
+
+
+        <reminder translate="label" module="reviewbooster">
+          <label>Customer Review Reminder</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>400</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <enabled translate="label" module="reviewbooster">
+              <label>Enable Automatic Reminder System</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>1</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </enabled>
+            <order_status translate="label" module="reviewbooster">
+              <label>Reminder email will be created when order status is</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_order_status</source_model>
+              <sort_order>2</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment>Default is "Complete"</comment>
+              <depends>
+                <enabled>1</enabled>
+              </depends>
+            </order_status>
+            <!--
+						<not_remind_if_has_reviewed>
+              <label>Not send reminders if customer has ALREADY reviewed</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>3</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment>Automatic reminder system will NOT send reminders email if customer has ALREADY reviewed the product</comment>
+              <depends>
+                <enabled>1</enabled>
+              </depends>
+            </not_remind_if_has_reviewed>
+						-->
+            <check_newsletter_subscribe>
+              <label>Not send reminders if customers do not subscribe the newsletter</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>4</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment>Automatic reminder system will NOT send reminders email if the customers do NOT subscribe the newsletter</comment>
+              <depends>
+                <enabled>1</enabled>
+              </depends>
+            </check_newsletter_subscribe>
+            <waiting_time translate="label" module="reviewbooster">
+              <label>Reminder email will send after</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>5</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <validate>validate-digits</validate>
+              <comment>day(s). Default is "1"</comment>
+              <depends>
+                <enabled>1</enabled>
+              </depends>
+            </waiting_time>
+            <email_template translate="label" module="reviewbooster">
+              <label>Email template</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_email_template</source_model>
+              <sort_order>6</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <enabled>1</enabled>
+              </depends>
+            </email_template>
+            <email_sender translate="label" module="reviewbooster">
+              <label>Email Sender</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_email_identity</source_model>
+              <sort_order>7</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <enabled>1</enabled>
+              </depends>
+            </email_sender>
+          </fields>
+        </reminder>
+
+      </groups>
+    </reviewbooster>
+  </sections>
+</config>

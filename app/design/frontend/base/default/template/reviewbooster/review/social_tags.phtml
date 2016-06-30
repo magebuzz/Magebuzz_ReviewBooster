@@ -1,0 +1,27 @@
+<?php 
+$review = $this->getReviewData(); 
+$product = $this->getProductData();
+?>
+
+<!-- facebook -->
+<meta property="og:url" content="<?php echo Mage::helper('core/url')->getCurrentUrl(); ?>"/>
+
+<meta property="og:type" content="product"/>
+
+<meta property="og:title" content="<?php echo $product->getName()." ".Mage::helper('reviewbooster')->__('has received a review from')." ".$review->getNickname(); ?>"/>
+
+<meta property="og:description" content="<?php echo $review->getTitle().' : '.$review->getDetail(); ?>"/>
+
+<meta property="og:image" content="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(250) ?>"/>
+
+<meta property="product:sale_price:amount" content="<?php echo $product->getPrice() ?>" /> 
+
+<meta property="product:sale_price:currency" content="<?php  echo Mage::app()->getStore()->getCurrentCurrencyCode() ?>" />
+
+<!-- twitter -->
+<meta name="twitter:card" content="product" />
+<meta name="twitter:data1" content="<?php echo Mage::app()->getStore()->getCurrentCurrencyCode()." ".$product->getPrice() ?>" />
+<meta name="twitter:label1" content="Price" />
+
+
+ 

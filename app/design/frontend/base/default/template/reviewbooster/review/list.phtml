@@ -1,0 +1,345 @@
+<div class="box-reviewbooster">  
+	<?php if (Mage::helper('reviewbooster')->enableSocialSharing()) :?>
+	<!-- facebook -->
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;	
+		js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+	</script>
+
+	<!-- twitter -->
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+	</script>
+
+	<!-- Place this tag after the last +1 button tag. -->
+	<script type="text/javascript">
+		(function() {
+			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://apis.google.com/js/platform.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+		})();
+	</script>
+<?php endif;?>
+
+<script type="text/javascript"> var numId = 0; var idArray = new Array(); </script>
+
+<?php $_items = $this->getReviewsCollection()->getItems();?>
+<div id="customer_reviews">
+  <h3><span><?php echo Mage::helper('reviewbooster')->__('Customer Reviews') ?></span></h3>
+  <div class="attribute-content">
+  <?php if (count($_items)):?>
+    <?php echo $this->getChildHtml('toolbar') ?>
+    <ul id="customer-review-list">
+		<?php foreach ($_items as $_review):?>
+			<script>
+				idArray[numId] = '<?php echo $_review->getId(); ?>';
+				numId = numId+1;
+			</script>
+      <li class="item">
+        <div class="avatar">
+          <?php echo Mage::helper('reviewbooster')->__('<span>%s</span>', $this->escapeHtml($_review->getNickname())) ?>
+        </div> 
+        <div class="review-info">
+          <?php $_votes = $_review->getRatingVotes(); ?>
+          <?php if (count($_votes)): ?>
+          <div>
+            <table class="ratings-table">
+              <tbody>
+                <tr>
+                <?php foreach ($_votes as $_vote): ?>
+                    <td>
+                      <div class="review-rating">
+                      <?php echo $this->escapeHtml($_vote->getRatingCode()) ?>
+                        <div class="rating-box">
+                          <div class="rating" style="width:<?php echo $_vote->getPercent() ?>%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                <?php endforeach; ?>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <?php endif; ?>
+          <span class="date"><?php echo Mage::helper('reviewbooster')->__('%s', $this->formatDate($_review->getCreatedAt()), 'long') ?></span>
+          
+          <blockquote class="review-detail">
+            <?php echo nl2br($this->escapeHtml($_review->getDetail())) ?>
+          </blockquote>
+          
+          <?php if (Mage::getStoreConfig('reviewbooster/product_page/voting_enabled')) :?>
+            <div class="vote-buttons right" >
+              <div class="like_button" id="likedColor_<?php echo $_review->getId() ?>" onclick="thumb('<?php echo $_review->getId() ?>','thumb_up');">&nbsp;</div>
+              <strong id="like_number_<?php echo $_review->getId() ?>" ><?php echo $_review->getLikeNumber();?></strong>
+              
+              <div class="dislike_button" id="dislikedColor_<?php echo $_review->getId() ?>" onclick="thumb('<?php echo $_review->getId() ?>','thumb_down');">&nbsp;</div>
+              <strong id="dislike_number_<?php echo $_review->getId() ?>"><?php echo $_review->getDislikeNumber();?></strong>
+            </div>
+          <?php endif; ?>
+
+          <?php if (Mage::getStoreConfig('reviewbooster/product_page/review_social_sharing_enabled')) :?>
+          </br>
+          <ul class="social-sharing">
+              <!-- facebook -->
+              <li class="td-facebook">
+                <div class="fb-share-button" data-href="<?php echo $this->getReviewUrl($_review->getId()) ?>" data-type="button_count"></div>
+              </li>
+              <!-- twitter -->
+              <li class="td-twitter">
+                <a class="twitter-share-button" data-url="<?php echo $this->getReviewUrl($_review->getId()) ?>"></a>
+              </li>
+              <!-- Google+ -->
+              <li class="td-g-plusone" >
+                <div class="g-plusone" data-href="<?php echo $this->getReviewUrl($_review->getId()) ?>" data-size="medium"></div>
+              </li>
+          </ul>
+          <?php endif;?>
+        </div>
+      </li>
+      
+    <?php endforeach; ?>
+    </ul>
+		<div class="toolbar-review-bottom">
+      <?php echo $this->getChildHtml('toolbar') ?>
+    </div>
+  <?php endif;?>
+  <?php 
+    echo $this->getChildHtml('review_form');
+  ?>
+  </div>
+</div>
+<!--use ajax with like and dislike button-->
+	<script type="text/javascript">
+		function thumb(review_id, clicked){
+			var likeColorUrl = '<?php echo $this->getSkinUrl('magebuzz/reviewbooster/images/vote_like_color.png'); ?>';
+			var likeGrayUrl = '<?php echo $this->getSkinUrl('magebuzz/reviewbooster/images/vote_like_gray.png'); ?>';
+			var dislikeColorUrl = '<?php echo $this->getSkinUrl('magebuzz/reviewbooster/images/vote_dislike_color.png'); ?>';
+			var dislikeGrayUrl = '<?php echo $this->getSkinUrl('magebuzz/reviewbooster/images/vote_dislike_gray.png'); ?>';
+			
+			var url = '<?php echo $this->getUrl('reviewbooster/review/vote'); ?>';
+
+			var tmp_onclick;
+			
+			if (clicked == "thumb_up") {
+				var likedReviewIdArray = getCookie("liked").split(",");
+
+				var indexLiked = likedReviewIdArray.indexOf(review_id);
+
+				if (indexLiked > -1)  {
+
+					/* unlike */
+
+					var request = new Ajax.Request(
+						url,
+						{
+							method: 'get',
+
+							parameters: {
+								'review_id' : review_id,
+								'action_url' : "unlike"
+							},
+
+							onCreate: function() {
+								$("like_number_"+review_id).innerHTML = parseInt($("like_number_"+review_id).innerHTML) - 1;
+								$("likedColor_"+review_id).style.backgroundImage="url("+likeGrayUrl+")";//when use firefox;
+								tmp_onclick = $("likedColor_"+review_id).getAttribute('onclick');
+								$("likedColor_"+review_id).setAttribute('onclick','');
+							},
+
+							onSuccess: function (transport) {
+								var data = transport.responseJSON;
+								if(data.success == 'true'){
+									// notify some thing
+									likedReviewIdArray.splice(indexLiked, 1);
+									setCookie("liked",likedReviewIdArray.toString(),365);
+									$("likedColor_"+review_id).setAttribute('onclick',tmp_onclick);
+								}
+								else {
+									//$("#status").html("Tên có thể sử dụng");
+								}
+							},
+
+							onFailure: function() {
+								$("likedColor_"+review_id).setAttribute('onclick',tmp_onclick);
+							}
+						}
+					);
+
+				} else {
+
+					/* like */
+
+					var request = new Ajax.Request(
+						url,
+						{
+							method: 'get',
+
+							parameters: {
+								'review_id' : review_id,
+								'action_url' : "like"
+							},
+
+							onCreate: function() {
+								$("like_number_"+review_id).innerHTML = parseInt($("like_number_"+review_id).innerHTML) + 1;
+								$("likedColor_"+review_id).style.backgroundImage="url("+likeColorUrl+")"; //when use firefox
+								tmp_onclick = $("likedColor_"+review_id).getAttribute('onclick');
+								$("likedColor_"+review_id).setAttribute('onclick','');
+							},
+
+							onSuccess: function (transport) {
+								var data = transport.responseJSON;
+								if (data.success == 'true') {
+		//							$("like_number_"+review_id).innerHTML = data.like_number;
+									setCookie("liked",getCookie("liked")+","+review_id,365);
+									$("likedColor_"+review_id).setAttribute('onclick',tmp_onclick);
+								}
+								else {
+								//$("#status").html("Tên có thể sử dụng");
+								}
+							},
+
+							onFailure: function() {
+								$("likedColor_"+review_id).setAttribute('onclick',tmp_onclick);
+							}
+						}
+					);
+				}
+			}
+			
+
+			else if (clicked == "thumb_down"){
+
+				var dislikedReviewIdArray = getCookie("disliked").split(",");
+
+				var indexDisliked = dislikedReviewIdArray.indexOf(review_id);
+
+				if (indexDisliked > -1) {
+
+					/* undislike */
+
+					var request = new Ajax.Request(
+						url,
+						{
+							method: 'get',
+
+							parameters: {
+								'review_id' : review_id,
+								'action_url' : "undislike"
+							},
+
+							onCreate: function () {
+								$("dislike_number_"+review_id).innerHTML = parseInt($("dislike_number_"+review_id).innerHTML) - 1 ;
+								$("dislikedColor_"+review_id).style.backgroundImage="url("+dislikeGrayUrl+")";//when use firefox;
+								tmp_onclick = $("dislikedColor_"+review_id).getAttribute('onclick');
+								$("dislikedColor_"+review_id).setAttribute('onclick','');
+							},
+
+							onSuccess: function (transport) {
+								var data = transport.responseJSON;
+								if (data.success == 'true') {
+									dislikedReviewIdArray.splice(indexDisliked, 1);
+									setCookie("disliked",dislikedReviewIdArray.toString(),365);
+									$("dislikedColor_"+review_id).setAttribute('onclick',tmp_onclick);
+								}
+								else {
+									/* notify some thing */
+								}
+							},
+
+							onFailure: function() {
+								$("dislikedColor_"+review_id).setAttribute('onclick',tmp_onclick);
+							}
+						}
+					);
+				} else {
+
+					/* dislike */
+
+					var request = new Ajax.Request(
+						url,
+						{
+							method: 'get',
+
+							parameters: {
+								'review_id' : review_id,
+								'action_url' : "dislike"
+							},
+
+							onCreate: function() {
+								$("dislike_number_"+review_id).innerHTML = parseInt($("dislike_number_"+review_id).innerHTML) + 1;
+								$("dislikedColor_"+review_id).style.backgroundImage="url("+dislikeColorUrl+")";//when use firefox;
+								tmp_onclick = $("dislikedColor_"+review_id).getAttribute('onclick');
+								$("dislikedColor_"+review_id).setAttribute('onclick','');
+							},
+
+							onSuccess: function (transport) {
+								var data = transport.responseJSON;
+								if (data.success == 'true') {
+									setCookie("disliked",getCookie("disliked")+","+review_id,365);
+									$("dislikedColor_"+review_id).setAttribute('onclick',tmp_onclick);
+								}
+								else {
+									//$("#status").html("Tên có thể sử dụng");
+								}
+							},
+
+							onFailure: function() {
+								$("dislikedColor_"+review_id).setAttribute('onclick',tmp_onclick);
+							}
+						}
+					);
+				}
+			} else {
+				// invalid action
+			}
+		}
+		
+		function setCookie(cname, cvalue, exdays) {
+			var date = new Date();
+			date.setTime(date.getTime() + (exdays*24*60*60*1000));
+			var expires = "expires="+date.toUTCString();
+			document.cookie = cname + "=" + cvalue + "; " + expires;
+		}
+		
+		function getCookie(cname) {
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0; i<ca.length; i++) {
+					var c = ca[i];
+					if (c.charAt(0)==' ') c = c.substring(1);
+					if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+			}
+			return "";
+		}
+		
+		//set color background for vote
+		document.observe("dom:loaded", function() {
+			var likeColorUrl = '<?php echo $this->getSkinUrl('magebuzz/reviewbooster/images/vote_like_color.png'); ?>';
+			var dislikeColorUrl = '<?php echo $this->getSkinUrl('magebuzz/reviewbooster/images/vote_dislike_color.png'); ?>';
+			var likedColorArray = (getCookie("liked").split(","));
+			var dislikedColorArray = (getCookie("disliked").split(","));
+			
+			for(var j = 0; j<numId; j++){
+				//image is color of like action;
+				for(var i = 0; i<likedColorArray.length; i++){
+					var likedColor = likedColorArray[i];
+					if(idArray[j] == likedColor){
+						$("likedColor_"+likedColor).style.backgroundImage="url("+likeColorUrl+")";//when use firefox;
+					}
+				}
+				
+				//image is color of dislike action;
+				for(var i = 0; i<dislikedColorArray.length; i++){
+					var dislikedColor = dislikedColorArray[i];
+					if(idArray[j] == dislikedColor){
+						$("dislikedColor_"+dislikedColor).style.backgroundImage="url("+dislikeColorUrl+")";//when use firefox;
+					}
+				}
+			}
+		});
+	</script>
+</div>

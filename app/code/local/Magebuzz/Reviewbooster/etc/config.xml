@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Magebuzz_Reviewbooster>
+      <version>0.1.2</version>
+    </Magebuzz_Reviewbooster>    
+  </modules>
+
+  <global>
+    <models>
+      <reviewbooster>
+        <class>Magebuzz_Reviewbooster_Model</class>
+        <resourceModel>reviewbooster_resource</resourceModel>
+      </reviewbooster>
+
+      <reviewbooster_resource>
+        <class>Magebuzz_Reviewbooster_Model_Resource</class>
+        <entities>
+          <reminder>
+            <table>magebuzz_reviewbooster_reminder</table>
+          </reminder>
+          <unsubscriber>
+            <table>magebuzz_reviewbooster_unsubscribed_customer</table>
+          </unsubscriber>
+        </entities>
+      </reviewbooster_resource>
+    </models>
+
+    <resources>
+      <reviewbooster_setup>
+        <setup>
+          <module>Magebuzz_Reviewbooster</module>
+        </setup>
+      </reviewbooster_setup>
+    </resources>
+
+    <blocks>
+      <reviewbooster>
+        <class>Magebuzz_Reviewbooster_Block</class>
+      </reviewbooster>
+    </blocks>
+
+    <helpers>
+      <reviewbooster>
+        <class>Magebuzz_Reviewbooster_Helper</class>
+      </reviewbooster>
+    </helpers>       
+
+    <events>     
+      <review_save_after>
+        <observers>
+          <review_post_observer>
+            <class>Magebuzz_Reviewbooster_Model_Observer</class>
+            <method>sendAdminEmail</method>
+          </review_post_observer>
+        </observers>
+      </review_save_after>
+
+      <sales_order_save_after>
+        <observers>
+          <order_change_status_complete_observer>
+            <class>Magebuzz_Reviewbooster_Model_Observer</class>
+            <method>createReminder</method>
+          </order_change_status_complete_observer>
+        </observers>
+      </sales_order_save_after>
+    </events>
+
+    <template>
+      <email>
+        <reviewbooster_admin_notifier_email_template module="reviewbooster" translate="label">
+          <label>New Review Notification</label>
+          <file>reviewbooster/new_review_notification.html</file>
+          <type>html</type>
+        </reviewbooster_admin_notifier_email_template>
+        <reviewbooster_reminder_email_template module="reviewbooster" translate="label">
+          <label>Review Reminder Email for Customer</label>
+          <file>reviewbooster/review_reminder_email_2.html</file>
+          <type>html</type>
+        </reviewbooster_reminder_email_template>
+        <reviewbooster_reminder_email_template_link module="reviewbooster" translate="label">
+          <label>Review Reminder Email For Customer By Link</label>
+          <file>reviewbooster/review_reminder_email_link.html</file>
+          <type>html</type>
+        </reviewbooster_reminder_email_template_link>
+      </email>
+    </template>
+  </global>
+
+  <frontend>
+    <translate>
+      <modules>
+        <Magebuzz_Reviewbooster>
+          <files>
+            <default>Magebuzz_Reviewbooster.csv</default>
+          </files>
+        </Magebuzz_Reviewbooster>
+      </modules>
+    </translate>
+    <layout>
+      <updates>
+        <reviewbooster>
+          <file>reviewbooster.xml</file>
+        </reviewbooster>
+      </updates>
+    </layout>
+    <routers>
+      <reviewbooster>
+        <use>standard</use>
+        <args>
+          <module>Magebuzz_Reviewbooster</module>
+          <frontName>reviewbooster</frontName>
+        </args>
+      </reviewbooster>
+    </routers>
+  </frontend>
+
+  <adminhtml>
+    <translate>
+      <modules>
+        <Magebuzz_Reviewbooster>
+          <files>
+            <default>Magebuzz_Reviewbooster.csv</default>
+          </files>
+        </Magebuzz_Reviewbooster>
+      </modules>
+    </translate>
+    <layout>
+      <updates>
+        <reviewbooster>
+          <file>reviewbooster.xml</file>
+        </reviewbooster>
+      </updates>
+    </layout>
+    <events>
+      <adminhtml_widget_container_html_before>
+        <observers>
+          <revewbooster>
+            <class>Magebuzz_Reviewbooster_Model_Observer</class>
+            <type>singleton</type>
+            <method>addButtonsSendingReviewReminder</method>
+          </revewbooster>
+        </observers>
+      </adminhtml_widget_container_html_before>
+    </events>
+  </adminhtml>
+
+  <admin> 
+    <routers>
+      <adminhtml>
+        <args>
+          <use>admin</use>
+          <modules>
+            <Magebuzz_Reviewbooster after="Mage_Adminhtml">Magebuzz_Reviewbooster</Magebuzz_Reviewbooster>
+          </modules>
+        </args>
+      </adminhtml>
+    </routers>
+  </admin>
+
+  <crontab>
+    <jobs>
+      <send_review_reminder>
+        <schedule><cron_expr>*/15 * * * *</cron_expr></schedule>
+        <run><model>reviewbooster/observer::sendReminder</model></run>
+      </send_review_reminder>
+    </jobs>
+  </crontab>
+
+  <default>
+    <reviewbooster>
+      <product_page>
+        <review_enabled>1</review_enabled>
+        <voting_enabled>1</voting_enabled>
+        <review_social_sharing_enabled>1</review_social_sharing_enabled>
+      </product_page>
+      <sidebar>
+        <left_enabled>1</left_enabled>
+        <right_enabled>1</right_enabled>
+        <block_title>RECENT REVIEWS</block_title>
+        <category_filter_enabled>1</category_filter_enabled>
+        <number_item>3</number_item>
+        <min_percent_rating>80</min_percent_rating>
+        <product_image_enabled>1</product_image_enabled>
+      </sidebar>
+      <admin_notifier>
+        <enabled>1</enabled>
+        <admin_emails>admin1@magebuzz.com, admin2@magebuzz.com</admin_emails>
+      </admin_notifier>
+      <reminder>
+        <enabled>1</enabled>
+        <order_status>complete</order_status>
+        <not_remind_if_has_reviewed>1</not_remind_if_has_reviewed>
+        <check_newsletter_subscribe>1</check_newsletter_subscribe>
+        <waiting_time>1</waiting_time>
+        <email_sender>support</email_sender>
+      </reminder>
+    </reviewbooster>
+
+  </default>
+
+
+</config>

@@ -1,0 +1,58 @@
+<?php
+/*
+* Copyright (c) 2015 www.magebuzz.com 
+*/
+?>
+
+<?php if(count($this->_getReviewCollection()->getData())): ?>
+<div class="block block-related">
+  <div class="block-title">
+    <strong><span><?php echo $this->getBlockTitle(); ?></span></strong>
+  </div>
+  <div class="block-content">
+    <ol class="mini-products-list" id="block-related-review-left">
+
+    <?php foreach($this->_getReviewCollection() as $review): ?>
+      <?php $_item = Mage::getModel('catalog/product')->load($review->getEntityPkValue()); ?>
+      <li class="item">
+        <?php if ($this->_enabledDisplayProductImage()): ?>
+        <a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_item->getName()) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(50) ?>" width="50" height="50" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" /></a>
+        <div class="product-details">
+          <p class="product-name"><a href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->escapeHtml($_item->getName()) ?></a></p>
+        </div>  
+        <?php else :?>           
+          <div>
+          <p class="product-name"><a href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->escapeHtml($_item->getName()) ?></a></p>
+          </div> 
+        <?php endif; ?>
+        <div class="review-rating">
+          <div class="rating-box">
+            <div style="width:<?php echo $review->getAveragePercent(); ?>%" class="rating"></div>
+          </div>
+        </div>
+        <div class="review-text">
+          <h6><?php echo $review->getTitle(); ?></h6>
+          <p class="review-detail">
+          <?php 
+            $detail = $review->getDetail(); 
+            $detail = substr($detail, 0, 100);
+            $detail = preg_replace('/ [^ ]*$/', ' ...', $detail);
+            echo $detail;
+          ?>
+          </p>
+          <p class="review-date">
+          <em>(on   
+          <?php echo $this->formatDate($review->getCreatedAt(), Mage_Core_Model_Locale::FORMAT_TYPE_SHORT); ?> 
+          by 
+          <?php echo $review->getNickname(); ?>)</em>
+          </p>
+        <div>
+      </li>
+    <?php endforeach ?>
+    </ol>
+  </div>
+</div>
+<?php endif ?>
+
+<script type="text/javascript">decorateList('block-related-review-left', 'none-recursive')</script>
+

@@ -1,0 +1,32 @@
+<?php
+	$reminders = $this->getReminderCollection();
+	$order = $this->getOrder();
+?>
+
+<div style="margin:15px;">
+	<?php foreach ($reminders as $reminder): ?>
+		<?php $product = Mage::getModel('catalog/product')->load($reminder->getProductId()); ?>
+		<form action="<?php echo Mage::getUrl('reviewbooster/index/save_review', array('reminder_code'=> $reminder->getReminderCode())); ?>" method="post" class="review-form" style="margin-bottom: 10px;">
+			<fieldset>
+				<div style="text-align: center;">
+					<a href="<?php echo $product->getProductUrl()?>">
+						<div style="margin: 10px;">
+							<img src="<?php echo Mage::helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(150); ?>"
+							     alt="<?php echo $product->getName() ?>" />
+						</div>
+						<div style="margin: 10px;"><strong><?php echo $product->getName(); ?></strong></div>
+					</a>
+				</div>
+
+				<div>
+					<p style="font-family:Verdana;color:#525252;font-size:14px; text-align: left;" >
+						Please use this
+						<a href="<?php echo Mage::getUrl('reviewbooster/index/replyByCustomer',array('code' => $reminder->getReminderCode())); ?>"><span>link</span></a>
+						to post your rate and your review
+					</p>
+				</div>
+			</fieldset>
+
+		</form>
+	<?php endforeach; ?>
+</div>

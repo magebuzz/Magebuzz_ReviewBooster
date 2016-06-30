@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+  <adminhtml_reviewboosteradmin_managereminder>
+    <reference name="content">
+      <block type="reviewbooster/adminhtml_remindercontainer" name="reviewbooster.adminhtml.reminder.container" />
+    </reference>
+  </adminhtml_reviewboosteradmin_managereminder>
+
+  <adminhtml_reviewboosteradmin_manageunsubscriber>
+    <reference name="content">
+      <block type="reviewbooster/adminhtml_unsubscribercontainer" name="reviewbooster.adminhtml.unsubscriber.container" />
+    </reference>
+  </adminhtml_reviewboosteradmin_manageunsubscriber>
+
+  <adminhtml_reviewboosteradmin_social>
+    <reference name="content">
+      <block type="core/template" name="reviewbooster.adminhtml.social.init" template='reviewbooster/social_init.phtml'/>
+      <block type="reviewbooster/adminhtml_socialcontainer" name="reviewbooster.adminhtml.social.container" />
+    </reference>
+  </adminhtml_reviewboosteradmin_social>
+
+  <adminhtml_sales_order_view>
+    <reference name="content">
+      <block type="core/template" name="reviewbooster.popup.html" template="reviewbooster/popup.phtml" />
+    </reference>
+  </adminhtml_sales_order_view>
+</layout>

@@ -1,0 +1,105 @@
+<?php
+  $reminders = $this->getReminderCollection();
+  $order = $this->getOrder();
+?>
+
+<div style="margin:15px;">
+  <?php foreach ($reminders as $reminder): ?>
+    <?php $product = Mage::getModel('catalog/product')->load($reminder->getProductId()); ?>
+    <form action="<?php echo Mage::getUrl('reviewbooster/index/save_review', array('reminder_code'=> $reminder->getReminderCode())); ?>" method="post" class="review-form" style="margin-bottom: 10px;">
+      <fieldset>
+        <div style="text-align: center;">
+          <a href="<?php echo $product->getProductUrl()?>">
+            <div style="margin: 10px;">
+              <img src="<?php echo Mage::helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(150); ?>"
+                      alt="<?php echo $product->getName() ?>" />
+            </div>
+            <div style="margin: 10px;"><strong><?php echo $product->getName(); ?></strong></div>
+          </a>
+        </div>
+
+        <div class="review-rating">
+          <?php if ($this->getRatings() && $this->getRatings()->getSize()): ?>
+            <h4><?php echo Mage::helper('reviewbooster')->__('How do you rate this product?') ?></h4>
+            <?php foreach ($this->getRatings() as $_rating): ?>
+              <p>
+                <p><?php echo $this->escapeHtml($_rating->getRatingCode()) ?><span><em
+                    class="required">*</em></span></p>
+                <span style="display:inline-block;color:#fdc705;direction:ltr">
+                  <span style="display:inline-block;float:left;margin-right:15px">
+                    <input name="ratings[<?php echo $_rating->getId() ?>]" value="1" type="radio">
+                      <label>
+                        <span style="font-size:14px;letter-spacing:0.21em;padding-left:0">★</span>
+                      </label>
+                  </span>
+                  <span style="display:inline-block;float:left;margin-right:15px">
+                    <input name="ratings[<?php echo $_rating->getId() ?>]" value="2" type="radio">
+                      <label>
+                        <span style="font-size:14px;letter-spacing:0.21em;padding-left:0">★★</span>
+                      </label>
+                  </span>
+                  <span style="display:inline-block;float:left;margin-right:15px">
+                    <input name="ratings[<?php echo $_rating->getId() ?>]" value=3 type="radio">
+                      <label>
+                        <span style="font-size:14px;letter-spacing:0.21em;padding-left:0">★★★</span>
+                      </label>
+                  </span>
+                  <span style="display:inline-block;float:left;margin-right:15px">
+                    <input name="ratings[<?php echo $_rating->getId() ?>]" value="4" type="radio">
+                      <label>
+                        <span style="font-size:14px;letter-spacing:0.21em;padding-left:0">★★★★</span>
+                      </label>
+                  </span>
+                  <span style="display:inline-block;float:left;margin-right:15px">
+                    <input name="ratings[<?php echo $_rating->getId() ?>]" value="5" type="radio">
+                      <label>
+                        <span style="font-size:14px;letter-spacing:0.21em;padding-left:0">★★★★★</span>
+                      </label>
+                  </span>
+                </span>
+              </p>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </div>
+
+        <input type="hidden" name="reminder_code" value="<?php echo $reminder->getReminderCode() ?>"/>
+        <div class="form-list">
+          <h4><?php echo $this->__("Please write some lines for "); ?>
+            <span>'<?php echo $product->getName(); ?>'</span></h4>
+          <div style="margin:5px">
+            <label for="nickname_field" class="required"><?php echo $this->__('Nickname') ?></label><em>*</em>
+            <div class="input-box">
+              <input name="nickname" style="font-size:1em;padding-left:3px;min-height:33px;width:99%;border:solid 1px #bababa;font-weight:lighter;font-family:inherit" type="text">
+            </div>
+          </div>
+          <div style="margin:5px">
+            <label for="summary_field" class="required"><?php echo $this->__('Summary of Your Review') ?><em>*</em>
+            </label>
+            <div class="input-box">
+              <input name="title" style="font-size:1em;padding-left:3px;min-height:33px;width:99%;border:solid 1px #bababa;font-weight:lighter;font-family:inherit" type="text">
+            </div>
+          </div>
+          <div style="margin:5px">
+            <label for="review_field" class="required"><?php echo $this->__('Review') ?></label><em>*</em>
+            <div class="input-box">
+              <textarea name="detail" cols="40" rows="5" style="font-size:1em;padding-left:3px;min-height:60px;width:99%;border:solid 1px #bababa;font-weight:lighter;font-family:inherit;margin-bottom:20px"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="buttons-set" style="text-align: right; margin-right: 5px;">
+          <input style="font-family:inherit;border:1px solid #b89405;padding:6px 13px;text-transform:uppercase;text-decoration:none;border-radius:6px;background-color:#fdc501;background-image:url();background-image:-moz-linear-gradient(bottom,rgba(3,3,3,.08) 0%,rgba(255,255,255,.08) 100%);background-image:-o-linear-gradient(bottom,rgba(3,3,3,.08) 0%,rgba(255,255,255,.08) 100%);
+          background-image:-webkit-linear-gradient(bottom,rgba(3,3,3,.08) 0%,rgba(255,255,255,.08) 100%);background-image:linear-gradient(bottom,rgba(3,3,3,.08) 0%,rgba(255,255,255,.08) 100%);color:#7b660b;font-size:16px"
+                 value="<?php echo $this->__('Submit Review') ?>" type="submit">
+        </div>
+        <div>
+          <p style="font-family:Verdana;color:#525252;font-size:10px; text-align: left;" >
+            You can also go to this
+            <a href="<?php echo Mage::getUrl('reviewbooster/index/replyByCustomer',array('code' => $reminder->getReminderCode())); ?>"><span>link</span></a>
+            to post your rate and your review
+          </p>
+        </div>
+      </fieldset>
+
+    </form>
+  <?php endforeach; ?>
+</div>

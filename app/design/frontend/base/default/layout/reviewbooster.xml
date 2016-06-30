@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+   <default>
+     <reference name="head">
+       <action method="addCss">
+         <stylesheet>magebuzz/reviewbooster/css/reviewbooster.css</stylesheet>
+       </action>
+     </reference>
+  </default>
+
+  <catalog_product_view>
+    <reference name="product.info">
+      <action method="addReviewSummaryTemplate" ifconfig="reviewbooster/product_page/review_enabled"><type>default</type><template>reviewbooster/helper/review_summary.phtml</template></action>      
+
+      <block type="page/html_pager" name="product_review_list.toolbar" />
+
+      <block type="core/template" name="product_review_list.count" template="review/product/view/count.phtml" />
+
+      <block type="reviewbooster/review_product_list" name="product.info.product_additional_data" as="product_additional_data">
+        <action method="setTemplate" ifconfig="reviewbooster/product_page/review_enabled">
+          <template>reviewbooster/review/list.phtml</template>
+        </action>
+        
+        <block type="reviewbooster/review_product_form" name="product.review.form" as="review_form">
+          <block type="reviewbooster/captcha" name="captcha" template="reviewbooster/captcha.phtml"/>
+          <action method="setTemplate">
+            <template>reviewbooster/review/form.phtml</template>
+          </action>
+          
+          <block type="page/html_wrapper" name="product.review.form.fields.before" as="form_fields_before" translate="label">
+            <label>Review Form Fields Before</label>
+            <action method="setMayBeInvisible">
+              <value>1</value>
+            </action>
+          </block>
+        </block>                               
+      </block>
+    </reference>
+  </catalog_product_view>
+
+  <review_product_view>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>reviewbooster/review/2columns-right-with-facebook.phtml</template>
+      </action>
+
+      <block type="review/view" name="review.social.tags" template="reviewbooster/review/social_tags.phtml">
+      </block>
+    </reference>
+  </review_product_view>
+
+  <review_product_list>
+    <reference name="product.review.form">
+      <action method="setTemplate">
+        <template>reviewbooster/review/form.phtml</template>
+      </action>
+
+      <block type="page/html_wrapper" name="product.review.form.fields.before" as="form_fields_before" translate="label">
+        <label>Review Form Fields Before</label>
+        <action method="setMayBeInvisible"><value>1</value></action>
+      </block>
+    </reference>
+  </review_product_list>
+
+  <reviewbooster_index_sorry>
+    <reference name="content">
+      <block type="core/template" name="block.sorry" template="reviewbooster/sorry.phtml">
+      </block> 
+    </reference>
+  </reviewbooster_index_sorry>
+
+  <reviewbooster_email_reminder>
+    <block type="review/form" name="review.reminder.form" template="reviewbooster/email/reminder_email.phtml">
+    </block>
+  </reviewbooster_email_reminder>
+  <reviewbooster_email_reminder_link>
+    <block type="core/template" name="review.reminder.link.form" template="reviewbooster/email/reminder_link_email.phtml"></block>
+  </reviewbooster_email_reminder_link>
+
+  <reviewbooster_product_post>
+    <block type="reviewbooster/review_product_list" name="product.info.product_additional_data"
+           as="product_additional_data" template="reviewbooster/review/list.phtml" output="toHtml">
+      <block type="reviewbooster/review_product_pager" name="product_review_list.toolbar" as="toolbar"/>
+      <block type="reviewbooster/review_product_form" name="product.review.form" as="review_form">
+        <action method="setTemplate">
+          <template>reviewbooster/review/form.phtml</template>
+        </action>
+
+        <block type="page/html_wrapper" name="product.review.form.fields.before" as="form_fields_before"
+               translate="label">
+          <label>Review Form Fields Before</label>
+          <action method="setMayBeInvisible">
+            <value>1</value>
+          </action>
+        </block>
+
+      </block>
+    </block>
+  </reviewbooster_product_post>
+
+</layout>
